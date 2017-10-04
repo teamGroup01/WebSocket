@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script>
+		window.onload = function () {
+			function getElement(id) {
+				return document.getElementById(id)
+			}
+
+			if ('WebSocket' in window) {
+
+
+				let ws = new WebSocket('ws://echo.websocket.org/')
+
+				// Web Socket 已连接上
+				ws.addEventListener('open', () => {
+					console.log('websocket open')
+					getElement('recv').innerHTML = 'CONNECTED'
+				})
+				// 关闭 websocket
+				ws.addEventListener('close', () => {
+					console.log('websocket closed')
+				})
+				//客户端接收服务端数据时触发
+				ws.addEventListener('message', (e) => {
+					console.log(e.data)
+					getElement('recv').innerHTML = e.data
+				})
+
+				getElement('sendBtn').addEventListener('click', function () {
+					ws.send(getElement('sendTxt').value)
+				})
+
+
+			} else {
+
+
+				alert('请及时更新你的浏览器')
+
+
+			}
+
+		}
+	</script>
+</head>
+
+<body>
+	<h1>Echo Test</h1>
+	<input type="text" id="sendTxt">
+	<button id="sendBtn">send inputValue</button>
+	<div id="recv"></div>
+</body>
+
+</html>

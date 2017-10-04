@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Chat Room</title>
+	<script>
+		window.onload = function () {
+			function getElement(id) {
+				return document.getElementById(id)
+			}
+
+			function showMessage(str) {
+				var elDiv = document.createElement('div')
+				elDiv.innerHTML = str
+				document.body.appendChild(elDiv)
+			}
+
+			if ('WebSocket' in window) {
+
+
+				let ws = new WebSocket('ws://localhost:3000/')
+
+
+				getElement('sendBtn').addEventListener('click', function () {
+					let txt = getElement('sendTxt').value
+					if (txt) {
+						ws.send(txt)
+					}
+				})
+
+				ws.addEventListener('close', () => {
+					console.log('websocket closed')
+				})
+
+				ws.addEventListener('message', (e) => {
+					console.log(e.data)
+					showMessage(e.data)
+				})
+
+
+
+			} else {
+
+
+				alert('请及时更新你的浏览器')
+
+
+			}
+
+		}
+	</script>
+</head>
+
+<body>
+	<h1>Echo Test</h1>
+	<input type="text" id="sendTxt">
+	<button id="sendBtn">send inputValue</button>
+</body>
+
+</html>
